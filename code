@@ -1,0 +1,27 @@
+import numpy as np
+import csv
+
+def read_csv():
+    print('CSV reading example:\n')
+    # Create a reader
+    # reader = csv.DictReader(open('bats.csv'))
+    #
+    # for row in reader:
+    #
+    #     # keys are the column names
+    #     if row['T'] == 'True':
+    #         print('a')
+    print('poo')
+
+
+
+
+
+
+def main():
+    read_csv()
+    print('\n')
+
+
+if __name__ == '__main__':
+    main()
