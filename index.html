@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Histogram Graph</title>
+  <title>Soulmate Calculator</title>
   <!-- Include Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>Histogram Graph</h1>
+  <h1>It's cuffing season!</h1>
+  <h1>Answer a few questions to figure out the chance of finding your soulmate</h1>
 
   <label for="numberInput">Enter a number for parameter p:</label>
   <input type="number" id="numberInput">
@@ -22,33 +23,16 @@
       const data = []; // Your data array goes here
 
       // Creating bins for the histogram
-      const binCount = 10; // Number of bins
-      const binWidth = Math.ceil((Math.max(...data) - Math.min(...data)) / binCount);
-      const bins = Array.from({ length: binCount }, (_, i) => i * binWidth);
-
-      // Count occurrences of data in each bin
-      const binCounts = Array.from({ length: binCount }, () => 0);
-      data.forEach(value => {
-        const binIndex = Math.floor((value - Math.min(...data)) / binWidth);
-        binCounts[binIndex]++;
-      });
-
-      // Prepare data for Chart.js
-      const chartData = {
-        labels: bins.map((bin, index) => `${bin}-${bin + binWidth}`),
-        datasets: [{
-          label: 'Histogram',
-          data: binCounts,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      };
-
+      const binCount = 1; // Number of bins
+      // const binWidth = Math.ceil((Math.max(...data) - Math.min(...data)) / binCount);
+      const binWidth = 100;
       // Chart.js configuration
       const chartConfig = {
         type: 'bar',
-        data: chartData,
+        datasets: [{
+          data: [20, 10],
+        }],
+        labels: ['a', 'b'],
         options: {
           scales: {
             y: {
@@ -57,7 +41,7 @@
           }
         }
       };
-      
+
 
       // Get the canvas element
       const ctx = document.getElementById('histogramChart').getContext('2d');
