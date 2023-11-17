@@ -1,10 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!-- Template that renders a single random variable card -->
 
-</body>
-</html>
+<div class="bordered">
+<p><b>Bernoulli Random Variable</b></p>
+
+
+<table>
+	<tr>
+		<th style="width:150px">Notation:</td>
+		<td>$X \sim \Ber(p)$</td>
+	</tr>
+	<tr>
+		<th>Description:</td>
+		<td>A boolean variable that is 1 with probability $p$</td>
+	</tr>
+	<tr>
+		<th>Parameters:</td>
+		<td>$p$, the probability that $X=1$.</td>
+	</tr>
+
+
+	<tr>
+		<th>Support:</td>
+		<td>$x$ is either 0 or 1</td>
+	</tr>
+	<tr>
+		<th>PMF equation:</th>
+		<td>$\p(X=x) =
+			\begin{cases}
+				p && \text{if }x = 1\\
+				1-p && \text{if }x = 0
+			\end{cases}$</td>
+	</tr>
+	<tr>
+		<th>PMF (smooth):</th>
+		<td>$\p(X=x) = p^x(1-p)^{1-x}$</td>
+	</tr>
+	<tr>
+		<th>Expectation:</th>
+		<td>$\E[X] = p$</td>
+	</tr>
+	<tr>
+		<th>Variance:</th>
+		<td>$\var(X) = p (1-p)$</td>
+	</tr>
+	<tr>
+		<th>PMF graph:</th>
+	</tr>
+</table>
+Parameter $p$: <input onchange="redrawBernoulliPmf()" type="number" class="form-control example-inline-input mb-3" id="bernoulliPmfP" min="0" max="1" value="0.80" step = "0.05">
+<canvas id="bernoulliPmf" style="max-height: 400px"></canvas>
+</div>
+
+<script>
+
+$(document).ready(function(){
+	redrawBernoulliPmf()
+})
+
+function redrawBernoulliPmf() {
+	let parentDivId = 'bernoulliPmf'
+	let p = parseFloat($('#bernoulliPmfP').val())
+	drawBernoulliPmf(parentDivId, p)
+}
+
+function drawBernoulliPmf(parentDivId, p) {
+	if(window.myBernLine) {
+		window.myBernLine.destroy()
+	}
+	var xValues = [0, 1]
+	var q = 1 - p;
+	var yValues = [q.toFixed(5), p.toFixed(5)]
+	let xLabel = 'Values that X can take on'
+	let yLabel = 'Probability'
+
+	var config = standardPMFConfig(xValues, yValues, xLabel, yLabel)
+	config.options.scales.x = {
+      display: true,
+      title: {
+        display: true,
+        text: xLabel
+      }
+    }
+	var ctx = document.getElementById(parentDivId).getContext('2d');
+	window.myBernLine = new Chart(ctx, config);
+}
+</script>
