@@ -9,8 +9,12 @@
   <h1>It's cuffing season!</h1>
   <h1>Answer a few questions to figure out the chance of finding your soulmate</h1>
 
-  <label for="numberInput">Enter a number for parameter p:</label>
-  <input type="number" id="numberInput">
+  <label for="numberInput1">number 1</label>
+  <input type="number1" id="numberInput1">
+  <label for="numberInput2">number 2</label>
+  <input type="number2" id="numberInput2">
+  <label for="numberInput3">number 3</label>
+  <input type="number3" id="numberInput3">
   <button onclick="generateHistogram()">Generate Histogram</button>
 
   <canvas id="histogramChart" width="400" height="200"></canvas>
@@ -19,6 +23,14 @@
   <script type="module">
 
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+    const ageandincomedata = await d3.csv("data/ageandincome2022.csv");
+    const ageandsexdata = await d3.csv("data/ageandsex2022.csv");
+    const popprofilehousingdata = await d3.csv("data/popprofilehousing2022.csv");
+    const weightsdata = await d3.csv("data/weights.csv");
+
+    console.log('ageandincomedata: ', ageandincomedata)
+    
     
     // Declare the chart dimensions and margins.
     const width = 640;
