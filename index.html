@@ -2,20 +2,63 @@
 <html>
 <head>
   <title>Soulmate Calculator</title>
-  <!-- Include Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>It's cuffing season!</h1>
   <h1>Answer a few questions to figure out the chance of finding your soulmate</h1>
 
-  <label for="numberInput1">number 1</label>
-  <input type="number1" id="numberInput1">
-  <label for="numberInput2">number 2</label>
-  <input type="number2" id="numberInput2">
-  <label for="numberInput3">number 3</label>
-  <input type="number3" id="numberInput3">
-  <button onclick="generateHistogram()">generate button (does nothing)</button>
+  <label for="sex">I am looking for someone who is</label>
+  <select id="sex" name="sex">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+  
+  <label for="age">Select Age Group:</label>
+  <select id="age" name="age">
+    <option value="20-24">20-24</option>
+    <option value="25-29">25-29</option>
+    <option value="30-34">30-34</option>
+    <option value="35-39">35-39</option>
+    <option value="40-44">40-44</option>
+    <option value="45-50">45-50</option>
+    <option value="51-55">51-55</option>
+    <option value="56-60">56-60</option>
+    <option value="61-65">61-65</option>
+    <option value="66-70">66-70</option>
+    <option value="71-75">71-75</option>
+    <option value="76-80">76-80</option>
+    <option value="81">81+</option>
+  </select>
+
+  <label for="hair">Select Hair Color:</label>
+  <select id="hair" name="hair">
+    <option value="blackHair">Black</option>
+    <option value="brownHair">Brown</option>
+    <option value="blondeHair">Blonde</option>
+    <option value="redHair">Red</option>
+  </select>
+
+  <label for="eye">Select Eye Color:</label>
+  <select id="eye" name="eye">
+    <option value="blueEye">Blue</option>
+    <option value="brownEye">Brown</option>
+    <option value="greenEye">Green or other</option>
+  </select>
+
+  <label for="height">Height:</label>
+  <select id="height" name="height">
+    <option value="underFive">Less than 5 feet tall</option>
+    <option value="fivePlus">5' - 5'3"</option>
+    <option value="fiveThreePlus">5'4" - 5'6"</option>
+    <option value="fiveSixPlus">5'7" - 5'9"</option>
+    <option value="fiveNinePlus">5'9" - 5'11"</option>
+    <option value="moreThanSix">More than 6 feet tall</option>
+  </select>
+
+  <small>Apologetic disclaimer: much of this data is from the US Census, which only has data for "Male" and "Female". I recognize that this excludes many people and makes the Soulmate Calculator less fun.</small>
+
+
+  <button onclick="saveValues()">Calculate</button>
 
   <canvas id="histogramChart" width="400" height="200"></canvas>
   <div id="container"></div>
@@ -28,22 +71,73 @@
     const ageandsexdata = await d3.csv("data/ageandsex2022.csv");
     const popprofilehousingdata = await d3.csv("data/popprofilehousing2020.csv");
     const weightsdata = await d3.csv("data/weights.csv");
+    const numMales = 165228214
+    const numFemales = 168059348
+    const numPeople = 333287562
 
-    var householdIncomeData ={
+    const chanceMale = numMale / numPeople
+    const chanceFemale = numFemale / numPeople
+
+    var ageAndSexData = {
+      20: {'male': 11488577/numPeople, 'female': 10957463/numPeople},
+      25: {'male': 11245260/numPeople, 'female': 10762368/numPeople},
+      30: {'male': 11785090/numPeople, 'female': 11440546/numPeople},
+      35: {'male': 11322522/numPeople, 'female': 11013337/numPeople},
+      40: {'male': 10939843/numPeople, 'female': 10771942/numPeople},
+      45: {'male': 9853198/numPeople, 'female': 9787727/numPeople},
+      50: {'male': 10447394/numPeople, 'female': 10388127/numPeople},
+      55: {'male': 10163454/numPeople, 'female': 10390161/numPeople},
+      60: {'male': 10492488/numPeople, 'female': 11081365/numPeople},
+      65: {'male': 8798968/numPeople, 'female': 9760529/numPeople},
+      70: {'male': 7149850/numPeople, 'female': 8188725/numPeople},
+      75: {'male': 4901587/numPeople, 'female': 6103874/numPeople},
+      80: {'male': 2213087/numPeople, 'female': 3946856/numPeople}
+    }
+
+
+    var householdIncomeData = {
     0: {0: 718818, 10000: 718818, 15000: 258998, 20000: 315881, 25000: 296331, 30000: 341999, 35000: 294764, 40000: 315664, 45000: 243175, 50000: 474780, 60000: 574788, 75000: 578015, 100000: 300929, 125000: 140104, 150000: 111129, 200000: 78652},
     25: {0: 1951920, 10000: 926285, 15000: 800098, 20000: 1095127, 25000: 1159690, 30000: 1466250, 35000: 1355753, 40000: 1564254, 45000: 1386158, 50000: 3006782, 60000: 4305239, 75000: 6153740, 100000: 4936590, 125000: 3482583, 150000: 4182808, 200000: 5001113},
     45: {0: 2298892, 10000: 1497958, 15000: 1113994, 20000: 1190739, 25000: 1202878, 30000: 1347782, 35000: 1291127, 40000: 1421107, 45000: 1281853, 50000: 2758946, 60000: 3918418, 75000: 5849072, 100000: 4933555, 125000: 3731699, 150000: 5062628, 200000: 7382159},
     65: {0: 2149924, 10000: 2120073, 15000: 2025934, 20000: 2012195, 25000: 1846766, 30000: 1763352, 35000: 1653876, 40000: 1579886, 45000: 1446731, 50000: 2693233, 60000: 3363896, 75000: 4069942, 100000: 2682639, 125000: 1736903, 150000: 1916446, 200000: 2416852}};
 
-    // Log the array of objects
-    console.log('age and income data: ', householdIncomeData);
-    console.log('25 year olds  ', householdIncomeData[25]);
+    var eyeColorProbs = {'blue': .45, 'brown': .27, 'green': .28}
+    var hairColorProbs = {'black': .85, 'brown': .11, 'blonde': .02, 'red': .01}
 
-    // console.log('ageandincomedata: ', ageandincomedata)
-    // console.log('ageandincomedata[United States]: ', ageandincomedata["United States"])
-    // console.log('ageandincomedata["Estimate!!Total:!!Householder 25 to 44 years:!!$10,000 to $14,999"]: ', ageandincomedata["Estimate!!Total:!!Householder 25 to 44 years:!!$10,000 to $14,999"])
-    
-    
+    var femaleAgeAndHeightPercentiles = {
+      20: {.05: 59.0, .1: 60.0, .15: 60.6, .25: 61.6, .5: 63.5, .75: 65.3, .85: 66.3, .9: 67.0, .95: 67.9},
+      30: {.05: 59.5, .1: 60.7, .15: 61.2, .25: 62.2, .5: 64.0, .75: 66.0, .85: 67.0, .9: 67.5, .95: 68.3},
+      40: {.05: 59.3, .1: 60.2, .15: 60.9, .25: 62.1, .5: 64.0, .75: 65.6, .85: 66.7, .9: 67.5, .95: 68.6},
+      50: {.05: 59.3, .1: 60.2, .15: 60.7, .25: 61.6, .5: 63.4, .75: 65.3, .85: 66.4, .9: 67.0, .95: 67.5},
+      60: {.05: 58.8, .1: 60.1, .15: 60.6, .25: 61.4, .5: 63.3, .75: 65.1, .85: 66.0, .9: 66.5, .95: 67.6},
+      70: {.05: 58.1, .1: 59.3, .15: 60.0, .25: 60.6, .5: 62.2, .75: 64.0, .85: 64.9, .9: 65.3, .95: 66.2},
+      80: {.05: 57.2, .1: 57.9, .15: 58.8, .25: 59.6, .5: 61.3, .75: 62.9, .85: 63.7, .9: 64.4, .95: 65.6},
+    }
+
+    var maleAgeAndHeightPercentiles = {
+      20: {.05: 64.8, .1: 65.8, .15: 66.3, .25: 67.3, .5: 69.3, .75: 71.0, .85: 72.1, .9: 72.8, .95: 73.6},
+      30: {.05: 64.4, .1: 65.6, .15: 66.4, .25: 67.4, .5: 69.6, .75: 71.4, .85: 72.6, .9: 73.3, .95: 74.3},
+      40: {.05: 64.4, .1: 65.4, .15: 66.3, .25: 67.5, .5: 69.5, .75: 71.4, .85: 72.0, .9: 72.8, .95: 74.2},
+      50: {.05: 64.1, .1: 65.0, .15: 66.0, .25: 67.0 , .5: 69.0, .75: 71.1, .85: 72.1, .9: 72.8, .95: 73.9},
+      60: {.05: 64.0, .1: 64.9, .15: 65.7, .25: 66.7, .5: 68.6, .75: 70.4, .85: 71.7, .9: 72.3, .95: 72.8},
+      70: {.05: 63.6, .1: 64.8, .15: 65.4, .25: 66.4, .5: 68.1, .75: 69.9, .85: 70.6, .9: 71.8, .95: 72.7},
+      80: {.05: 62.0, .1: 63.4, .15: 64.2, .25: 65.3, .5: 67.1, .75: 69.0, .85: 70.2, .9: 70.7, .95: 71.8},
+    }
+
+    function saveValues() {
+        var selectedGender = document.getElementById("sex").value;
+        var selectedAge = document.getElementById("age").value;
+        var selectedHair = document.getElementById("hair").value;
+        var selectedEye = document.getElementById("eye").value;
+        var selectedHeight = document.getElementById("height").value;
+
+        const allTheThings = [selectedGender, selectedAge, selectedHair, selectedEye, selectedHeight]
+        console.log(allTheThings)
+        console.log('[gender, age, hair, eye, height]')
+
+        
+    }
+
     // Declare the chart dimensions and margins.
     const width = 640;
     const height = 400;
