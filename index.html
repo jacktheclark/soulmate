@@ -55,7 +55,7 @@
     <option value="moreThanSix">More than 6 feet tall</option>
   </select>
 
-  <label for="income">&#128200; Household Income</label>
+  <label for="income">&#128176; Household Income</label>
   <select id="income" name="income">
     <option value="any">Doesn't matter to me</option>
     <option value="any">More than $25k</option>
@@ -64,18 +64,27 @@
     <option value="any">More than $200k</option>
   </select>
 
-  <small>Apologetic disclaimer: much of this data is from the US Census, which only has data for "Male" and "Female". I recognize that this excludes many people and makes the Soulmate Calculator less fun.</small>
+  <div class="disclaimer">
+    <p>Apologetic disclaimer: much of this data is from the US Census, which only has data for "Male" and "Female". I recognize that this excludes many people and makes the Soulmate Calculator less fun.</p>
+  </div>
 
-
-  <button onclick="saveValues()">Calculate</button>
+  <button onclick=saveValues()>Calculate</button>
 
   <div class="probability-section">
     <h2>Chance of meeting your soulmate in a.....</h2>
+
+    <div class="probability-labels">
+      <div>Room of 100 People</div>
+      <div>Room of 200 People</div>
+      <div>Room of 500 People</div>
+      <div>Room of 1000 People</div>
+    </div>
+
     <div class="probability-values">
-        <div id="prob-100"></div>
-        <div id="prob-200"></div>
-        <div id="prob-500"></div>
-        <div id="prob-1000"></div>
+        <div id="prob-100">??%</div>
+        <div id="prob-200">??%</div>
+        <div id="prob-500">??%</div>
+        <div id="prob-1000">??%</div>
     </div>
   </div>
 
@@ -220,7 +229,7 @@
   <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        background-color: #e994a3;
         text-align: center;
         margin: 20px;
     }
@@ -239,7 +248,7 @@
     }
 
     button {
-        background-color: #4caf50;
+        background-color: #94E9DA;
         color: white;
         padding: 10px 20px;
         font-size: 16px;
@@ -248,14 +257,13 @@
     }
 
     button:hover {
-        background-color: #45a049;
+        background-color: #29C6AA;
     }
 
-    small {
-      font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        text-align: center;
-        margin: 20px;
+    .disclaimer {
+            font-size: 12px;
+            color: #fff;
+            margin-top: 10px;
     }
 
     .probability-section {
@@ -274,6 +282,13 @@
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 8px;
+    }
+
+    .probability-labels {
+            display: flex;
+            justify-content: space-around;
+            width: 600px;
+            margin-bottom: 10px;
     }
   </style>
 </body>
