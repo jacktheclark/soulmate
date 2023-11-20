@@ -4,9 +4,11 @@
   <title>Soulmate Calculator</title>
 </head>
 <body>
-  <h1>It's cuffing season!</h1>
-  <h1>Answer a few questions to figure out the chance of finding your soulmate</h1>
-
+  <div class="titles">
+    <h1>It's cuffing season!</h1>
+    <h3>Answer a few questions to figure out the chance of finding your soulmate</h3>
+  </div>
+  
   <label for="sex">I am looking for someone who is</label>
   <select id="sex" name="sex">
     <option value="male">Male</option>
@@ -290,6 +292,13 @@
             justify-content: space-around;
             width: 600px;
             margin-bottom: 10px;
+    }
+
+    .titles {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #E68798
     }
   </style>
 </body>
