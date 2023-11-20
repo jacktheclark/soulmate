@@ -75,8 +75,8 @@
     const numFemales = 168059348
     const numPeople = 333287562
 
-    const chanceMale = numMale / numPeople
-    const chanceFemale = numFemale / numPeople
+    const chanceMale = numMales / numPeople
+    const chanceFemale = numFemales / numPeople
 
     var ageAndSexData = {
       20: {'male': 11488577/numPeople, 'female': 10957463/numPeople},
@@ -175,5 +175,41 @@
     container.append(svg.node());
     
     </script>
+
+
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+        margin: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 200px;
+        padding: 8px;
+        margin-bottom: 16px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+  </style>
 </body>
 </html>
