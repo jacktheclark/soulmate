@@ -13,7 +13,7 @@
     <option value="female">Female</option>
   </select>
   
-  <label for="age">Select Age Group:</label>
+  <label for="age">&#128116; Age</label>
   <select id="age" name="age">
     <option value="20-24">20-24</option>
     <option value="25-29">25-29</option>
@@ -30,7 +30,7 @@
     <option value="81">81+</option>
   </select>
 
-  <label for="hair">Select Hair Color:</label>
+  <label for="hair">&#128525; Hair Color</label>
   <select id="hair" name="hair">
     <option value="blackHair">Black</option>
     <option value="brownHair">Brown</option>
@@ -38,14 +38,14 @@
     <option value="redHair">Red</option>
   </select>
 
-  <label for="eye">Select Eye Color:</label>
+  <label for="eye">&#128563; Eye Color</label>
   <select id="eye" name="eye">
     <option value="blueEye">Blue</option>
     <option value="brownEye">Brown</option>
     <option value="greenEye">Green or other</option>
   </select>
 
-  <label for="height">Height:</label>
+  <label for="height">&#128200; Height</label>
   <select id="height" name="height">
     <option value="underFive">Less than 5 feet tall</option>
     <option value="fivePlus">5' - 5'3"</option>
@@ -55,10 +55,29 @@
     <option value="moreThanSix">More than 6 feet tall</option>
   </select>
 
+  <label for="income">&#128200; Household Income</label>
+  <select id="income" name="income">
+    <option value="any">Doesn't matter to me</option>
+    <option value="any">More than $25k</option>
+    <option value="any">More than $50k</option>
+    <option value="any">More than $100k</option>
+    <option value="any">More than $200k</option>
+  </select>
+
   <small>Apologetic disclaimer: much of this data is from the US Census, which only has data for "Male" and "Female". I recognize that this excludes many people and makes the Soulmate Calculator less fun.</small>
 
 
   <button onclick="saveValues()">Calculate</button>
+
+  <div class="probability-section">
+    <h2>Chance of meeting your soulmate in a.....</h2>
+    <div class="probability-values">
+        <div id="prob-100"></div>
+        <div id="prob-200"></div>
+        <div id="prob-500"></div>
+        <div id="prob-1000"></div>
+    </div>
+  </div>
 
   <canvas id="histogramChart" width="400" height="200"></canvas>
   <div id="container"></div>
@@ -135,7 +154,28 @@
         console.log(allTheThings)
         console.log('[gender, age, hair, eye, height]')
 
+        var probabilities = generateProbabilities();
+
+        // Update the displayed probabilities
+        updateProbabilityDisplay(probabilities);
         
+    }
+
+    function generateProbabilities() {
+        // For demonstration purposes, generate random probabilities.
+        return {
+            prob100: Math.random() * 100,
+            prob200: Math.random() * 100,
+            prob500: Math.random() * 100,
+            prob1000: Math.random() * 100,
+        };
+    }
+
+    function updateProbabilityDisplay(probabilities) {
+        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(2)}%`;
+        document.getElementById("prob-200").innerText = `200 People: ${probabilities.prob200.toFixed(2)}%`;
+        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(2)}%`;
+        document.getElementById("prob-1000").innerText = `1000 People: ${probabilities.prob1000.toFixed(2)}%`;
     }
 
     // Declare the chart dimensions and margins.
@@ -209,6 +249,31 @@
 
     button:hover {
         background-color: #45a049;
+    }
+
+    small {
+      font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+        margin: 20px;
+    }
+
+    .probability-section {
+            margin-top: 40px;
+    }
+
+    .probability-values {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .probability-values div {
+        width: 150px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
     }
   </style>
 </body>
