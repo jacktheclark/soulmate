@@ -111,19 +111,19 @@
     const chanceFemale = numFemales / numPeople
 
     var ageAndSexData = {
-      20: {'male': 11488577/numPeople, 'female': 10957463/numPeople},
-      25: {'male': 11245260/numPeople, 'female': 10762368/numPeople},
-      30: {'male': 11785090/numPeople, 'female': 11440546/numPeople},
-      35: {'male': 11322522/numPeople, 'female': 11013337/numPeople},
-      40: {'male': 10939843/numPeople, 'female': 10771942/numPeople},
-      45: {'male': 9853198/numPeople, 'female': 9787727/numPeople},
-      50: {'male': 10447394/numPeople, 'female': 10388127/numPeople},
-      55: {'male': 10163454/numPeople, 'female': 10390161/numPeople},
-      60: {'male': 10492488/numPeople, 'female': 11081365/numPeople},
-      65: {'male': 8798968/numPeople, 'female': 9760529/numPeople},
-      70: {'male': 7149850/numPeople, 'female': 8188725/numPeople},
-      75: {'male': 4901587/numPeople, 'female': 6103874/numPeople},
-      80: {'male': 2213087/numPeople, 'female': 3946856/numPeople}
+      "20-24": {'male': 11488577/numPeople, 'female': 10957463/numPeople},
+      "25-29": {'male': 11245260/numPeople, 'female': 10762368/numPeople},
+      "30-34": {'male': 11785090/numPeople, 'female': 11440546/numPeople},
+      "35-39": {'male': 11322522/numPeople, 'female': 11013337/numPeople},
+      "40-44": {'male': 10939843/numPeople, 'female': 10771942/numPeople},
+      "45-50": {'male': 9853198/numPeople, 'female': 9787727/numPeople},
+      "51-55": {'male': 10447394/numPeople, 'female': 10388127/numPeople},
+      "56-60": {'male': 10163454/numPeople, 'female': 10390161/numPeople},
+      "61-65": {'male': 10492488/numPeople, 'female': 11081365/numPeople},
+      "66-70": {'male': 8798968/numPeople, 'female': 9760529/numPeople},
+      "71-75": {'male': 7149850/numPeople, 'female': 8188725/numPeople},
+      "76-80": {'male': 4901587/numPeople, 'female': 6103874/numPeople},
+      "81": {'male': 2213087/numPeople, 'female': 3946856/numPeople}
     }
 
 
@@ -166,6 +166,16 @@
         const allTheThings = [selectedGender, selectedAge, selectedHair, selectedEye, selectedHeight]
         console.log(allTheThings)
         console.log('[gender, age, hair, eye, height]')
+
+        if (selectedGender == "male") { //they are male
+            const chanceOfAge = ageAndSexData[selectedAge]
+
+            if (selectedAge == "20-24") { //0
+
+            }
+        } else { //then they are female
+
+        }
 
         var probabilities = generateProbabilities();
 
