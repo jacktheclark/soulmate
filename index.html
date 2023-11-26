@@ -184,9 +184,8 @@
     //return the chance thata member of the population is at least a user-specified height
     function heightChanceCalculator(selectedHeight, age, gender) {
         //height in the 20-30 year old range
-        if (gender == "male") {
-              const percentiles = maleAgeAndHeightPercentiles[age]
-        } else { //female
+        var percentiles = maleAgeAndHeightPercentiles[age]
+        if (gender == "female") {
           const percentiles = femaleAgeAndHeightPercentiles[age]
         }
         const meanHeightEstimate = percentiles[.5]
