@@ -190,6 +190,7 @@
         }
         const meanHeightEstimate = percentiles[.5]
         //Z scores
+        const conversionFactor = 1.34896
         const z_025 = (percentiles[.25] - meanHeightEstimate) / conversionFactor; //converion factor via IQR
         const z_075 = (percentiles[.75] - meanHeightEstimate) / conversionFactor;  // by definition, the Z-score at the median (50th percentile) is 0
         const estimated_std_dev = (percentiles[0.75] - percentiles[0.25]) / (z_075 - z_025);
@@ -231,7 +232,6 @@
         console.log(allTheThings)
         console.log('[gender, age, hair, eye, height, income]')
 
-        const conversionFactor = 1.34896
         const chanceOfAge = ageAndSexData[selectedAge][selectedGender]
         var chanceOfEarnings = 1
         var chanceOfHeight = 1
