@@ -370,10 +370,10 @@
     }
 
     function updateProbabilityDisplay(probabilities) {
-        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(2)}%`;
-        document.getElementById("prob-200").innerText = `200 People: ${probabilities.prob200.toFixed(2)}%`;
-        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(2)}%`;
-        document.getElementById("prob-1000").innerText = `1000 People: ${probabilities.prob1000.toFixed(2)}%`;
+        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(8)}%`;
+        document.getElementById("prob-200").innerText = `200 People: ${probabilities.prob200.toFixed(8)}%`;
+        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(8)}%`;
+        document.getElementById("prob-1000").innerText = `1000 People: ${probabilities.prob1000.toFixed(8)}%`;
     }
 
     function geometricPMF(k, p) {
@@ -422,7 +422,7 @@
     h2 {
       /* color: #e44d4d; */
       text-align: center;
-      margin-top: 20px;
+      margin-top: 40px;
       margin-bottom: 20px;
     }
 
