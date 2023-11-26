@@ -73,8 +73,8 @@
 
   <button onclick="saveValues()">Calculate</button>
 
+  <h2>Chance of meeting your soulmate in a.....</h2>
   <div class="probability-section">
-    <h2>Chance of meeting your soulmate in a.....</h2>
 
     <div class="grouping">
       <div class="probability-labels">Room of 100 People</div>
@@ -397,6 +397,8 @@
         color: #E68798
     }
 
+    
+
     select {
         width: 200px;
         padding: 8px;
@@ -415,6 +417,13 @@
 
     button:hover {
         background-color: #d63a56;
+    }
+
+    h2 {
+      /* color: #e44d4d; */
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     .disclaimer {
@@ -441,22 +450,22 @@
     }
 
     .probability-values {
-      color: #007bff; /* Mathematical and scientific value color */
+      color: #007bff; /* Blue color for technical values */
       font-family: 'Courier New', monospace;
       font-size: 16px;
     }
 
     .probability-labels {
       font-weight: bold;
-      color: #ff4d4d; /* Prominent and somewhat fancy label color */
+      color: #4c4c4c; /* Dark gray color for official labels with a playful touch */
       font-size: 18px;
     }
 
     .titles {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #E68798
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #E68798
     }
   </style>
 </body>
