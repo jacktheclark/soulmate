@@ -221,7 +221,7 @@
                 xValue = 72.0
               }
 
-              chanceOfHeight = 0.5 * (1 + math.erf((xValue - mean) / (stdDev * Math.sqrt(2))));
+              chanceOfHeight = 0.5 * (1 + math.erf((xValue - meanHeightEstimate) / (estimated_std_dev * Math.sqrt(2))));
 
             } else if (selectedAge == "25-29") { //0
               var totalEarningsAbove25 = householdIncomeData["25"][0] + householdIncomeData["25"][10000] + householdIncomeData["25"][15000] + householdIncomeData["25"][20000] + householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000]+ householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]
