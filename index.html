@@ -160,6 +160,66 @@
       "80": {.05: 62.0, .1: 63.4, .15: 64.2, .25: 65.3, .5: 67.1, .75: 69.0, .85: 70.2, .9: 70.7, .95: 71.8},
     }
 
+    //calculate the chance of someone within an age bracket earning a minimum of a user-specified income
+    function incomeChanceCalculator(selectedIncome, age) {
+      //sample space
+      const totalEarnings = householdIncomeData[age][0] + householdIncomeData[age][10000] + householdIncomeData[age][15000] + householdIncomeData[age][20000] + householdIncomeData[age][25000] + householdIncomeData[age][30000] + householdIncomeData[age][35000] + householdIncomeData[age][40000] + householdIncomeData[age][45000] + householdIncomeData[age][50000] + householdIncomeData[age][60000]+ householdIncomeData[age][75000] + householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]
+
+      //event space
+      var chanceOfEarnings = 1
+      if (selectedIncome == "any") {
+        chanceOfEarnings = 1
+      } else if (selectedIncome == "25") {
+        chanceOfEarnings = (householdIncomeData[age][25000] + householdIncomeData[age][30000] + householdIncomeData[age][35000] + householdIncomeData[age][40000] + householdIncomeData[age][45000] + householdIncomeData[age][50000] + householdIncomeData[age][60000] + householdIncomeData[age][75000] + householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarnings
+      } else if (selectedIncome == "50") {
+        chanceOfEarnings = (householdIncomeData[age][50000] + householdIncomeData[age][60000] + householdIncomeData[age][75000] + householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarnings
+      } else if (selectedIncome == "100") {
+        chanceOfEarnings = (householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarningsUnder25
+      } else if (selectedIncome == "200") {
+        chanceOfEarnings = (householdIncomeData[age][200000]) / totalEarnings
+      } 
+    }
+
+    //calculate the normal distribution based on this age's height percentiles and derive the CDF for heights
+    //return the chance thata member of the population is at least a user-specified height
+    function heightChanceCalculator(selectedHeight, age, gender) {
+        //height in the 20-30 year old range
+        if (gender == "male") {
+              const percentiles = maleAgeAndHeightPercentiles[age]
+        } else { //female
+          const percentiles = femaleAgeAndHeightPercentiles[age]
+        }
+        const meanHeightEstimate = percentiles[.5]
+        //Z scores
+        const z_025 = (percentiles[.25] - meanHeightEstimate) / conversionFactor; //converion factor via IQR
+        const z_075 = (percentiles[.75] - meanHeightEstimate) / conversionFactor;  // by definition, the Z-score at the median (50th percentile) is 0
+        const estimated_std_dev = (percentiles[0.75] - percentiles[0.25]) / (z_075 - z_025);
+        var xValue = 0.0
+        var heightProb = 0.0
+
+        if (selectedHeight == "any") {
+          xValue = 0.0
+        } else if (selectedHeight == "fivePlus") {
+          xValue = 60.0
+        } else if (selectedHeight == "fiveFourPlus") {
+          xValue = 64.0
+        } else if (selectedHeight == "fiveSevenPlus") {
+          xValue = 67.0
+        } else if (selectedHeight == "fiveNinePlus") {
+          xValue = 69.0
+        } else if (selectedHeight == "moreThanSix") {
+          xValue = 72.0
+        }
+        if (xValue != 0.0) {
+          //1 - the CDF because the CDF is chance of that height or lower, and we want chance of that height or greater
+          heightProb = 1 - (0.5 * (1 + math.erf((xValue - meanHeightEstimate) / (estimated_std_dev * Math.sqrt(2))))); 
+        } else {
+          // 1 because they weren't picky
+          heightProb = 1
+        }
+        return heightProb
+    }
+
     window.saveValues = function() {
         var selectedGender = document.getElementById("sex").value;
         var selectedAge = document.getElementById("age").value;
@@ -179,238 +239,61 @@
         var chanceOfEye = eyeColorProbs[selectedEye]
         var chanceOfHair = hairColorProbs[selectedHair]
 
-        if (selectedAge == "20-24") { //0 in income data
-          var totalEarningsUnder25 = householdIncomeData["0"][0] + householdIncomeData["0"][10000] + householdIncomeData["0"][15000] + householdIncomeData["0"][20000] + householdIncomeData["0"][25000] + householdIncomeData["0"][30000] + householdIncomeData["0"][35000] + householdIncomeData["0"][40000] + householdIncomeData["0"][45000] + householdIncomeData["0"][50000] + householdIncomeData["0"][60000]+ householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]
-          
+        if (selectedAge == "20-24") {
+
           //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["0"][25000] + householdIncomeData["0"][30000] + householdIncomeData["0"][35000] + householdIncomeData["0"][40000] + householdIncomeData["0"][45000] + householdIncomeData["0"][50000] + householdIncomeData["0"][60000] + householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["0"][50000] + householdIncomeData["0"][60000] + householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["0"][200000]) / totalEarningsUnder25
-          } 
+          incomeChanceCalculator(selectedIncome, "0") //age = 0 in income data
           
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "20", selectedGender)
+          
+        } else if (selectedAge == "25-29") {
 
-          const percentiles = maleAgeAndHeightPercentiles["20"]
-          const meanHeightEstimate = percentiles[.5]
-          // Corresponding Z-scores
-          const z_025 = (percentiles[.25] - meanHeightEstimate) / conversionFactor;
-          const z_075 = (percentiles[.75] - meanHeightEstimate) / conversionFactor;  // by definition, the Z-score at the median (50th percentile) is 0
-          const estimated_std_dev = (percentiles[0.75] - percentiles[0.25]) / (z_075 - z_025);
-          var xValue = 0.0
-
-          //height in the 20-30 year old range
-          if (selectedHeight == "any") {
-            xValue = 0.0
-          } else if (selectedHeight == "fivePlus") {
-            xValue = 60.0
-          } else if (selectedHeight == "fiveFourPlus") {
-            xValue = 64.0
-          } else if (selectedHeight == "fiveSevenPlus") {
-            xValue = 67.0
-          } else if (selectedHeight == "fiveNinePlus") {
-            xValue = 69.0
-          } else if (selectedHeight == "moreThanSix") {
-            xValue = 72.0
-          }
-          if (xValue != 0.0) {
-            //1 - the CDF because the CDF is chance of that height or lower, and we want chance of that height or greater
-            chanceOfHeight = 1 - (0.5 * (1 + math.erf((xValue - meanHeightEstimate) / (estimated_std_dev * Math.sqrt(2))))); 
-          } else {
-            // 1 because they weren't picky
-            chanceOfHeight = 1
-          }
-          
-        } else if (selectedAge == "25-29") { //0
-          var totalEarningsAbove25 = householdIncomeData["25"][0] + householdIncomeData["25"][10000] + householdIncomeData["25"][15000] + householdIncomeData["25"][20000] + householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000]+ householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]
-          
           //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } 
-
-          //height in the 20-30 year old range
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          incomeChanceCalculator(selectedIncome, "25") //age = 25 in income data
+          
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "20", selectedGender)
 
         } else if (selectedAge == "30-34") { //0
-          var totalEarningsAbove25 = householdIncomeData["25"][0] + householdIncomeData["25"][10000] + householdIncomeData["25"][15000] + householdIncomeData["25"][20000] + householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000]+ householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]
-          
-          //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } 
 
-          //height in the 30-40 year old range (same as 20-30 basically)
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          //income
+          incomeChanceCalculator(selectedIncome, "25") //age = 25 in income data
+          
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "30", selectedGender)
           
         } else if (selectedAge == "35-39") { //0
-          var totalEarningsAbove25 = householdIncomeData["25"][0] + householdIncomeData["25"][10000] + householdIncomeData["25"][15000] + householdIncomeData["25"][20000] + householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000]+ householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]
-          
-          //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } 
 
-          //height in the 30-40 year old range (same as 20-30 basically)
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          //income
+          incomeChanceCalculator(selectedIncome, "25") //age = 25 in income data
+          
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "30", selectedGender)
           
         } else if (selectedAge == "40-44") { //0
-          var totalEarningsAbove25 = householdIncomeData["25"][0] + householdIncomeData["25"][10000] + householdIncomeData["25"][15000] + householdIncomeData["25"][20000] + householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000]+ householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]
           
           //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["25"][25000] + householdIncomeData["25"][30000] + householdIncomeData["25"][35000] + householdIncomeData["25"][40000] + householdIncomeData["25"][45000] + householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["25"][50000] + householdIncomeData["25"][60000] + householdIncomeData["25"][75000] + householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["25"][100000] + householdIncomeData["25"][125000] + householdIncomeData["25"][150000] + householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["25"][200000]) / totalEarningsAbove25
-          } 
+          incomeChanceCalculator(selectedIncome, "25") //age = 25 in income data
 
-          //height in the 40-50 year old range (same as 30-40 and 20-30 basically)
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "40", selectedGender)
 
         } else if (selectedAge == "45-50") {
-          var totalEarningsAbove45 = householdIncomeData["45"][0] + householdIncomeData["45"][10000] + householdIncomeData["45"][15000] + householdIncomeData["45"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          
-          //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } 
 
-          //height in the 40-50 year old range (same as 30-40 and 20-30 basically)
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          //income
+          incomeChanceCalculator(selectedIncome, "45") //age = 45 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "40", selectedGender)
 
         } else if (selectedAge == "51-55") {
-          var totalEarningsAbove45 = householdIncomeData["45"][0] + householdIncomeData["45"][10000] + householdIncomeData["45"][15000] + householdIncomeData["45"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
           
           //income
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } 
+          incomeChanceCalculator(selectedIncome, "45") //age = 45 in income data
 
-          //height in the 50-60 year old range
-          if (selectedHeight == "any") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fivePlus") {
-            chanceOfHeight = 1
-          } else if (selectedHeight == "fiveFourPlus") {
-            chanceOfHeight = 1-.05
-          } else if (selectedHeight == "fiveSevenPlus") {
-            chanceOfHeight = 1-.25
-          } else if (selectedHeight == "fiveNinePlus") {
-            chanceOfHeight = 1-.5
-          } else if (selectedHeight == "moreThanSix") {
-            chanceOfHeight = 1-.75
-          }
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "50", selectedGender)
 
         } else if (selectedAge == "56-60") {
           var totalEarningsAbove45 = householdIncomeData["45"][0] + householdIncomeData["45"][10000] + householdIncomeData["45"][15000] + householdIncomeData["45"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
@@ -425,84 +308,50 @@
           } else if (selectedIncome == "200") {
             var chanceOfEarnings = (householdIncomeData["45"][200000]) / totalEarningsAbove45
           } 
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "50", selectedGender)
+
         } else if (selectedAge == "61-65") { //0
-          var totalEarningsAbove45 = householdIncomeData["45"][0] + householdIncomeData["45"][10000] + householdIncomeData["45"][15000] + householdIncomeData["45"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } 
-        } else if (selectedAge == "61-65") { //0
-          var totalEarningsAbove65 = householdIncomeData["65"][0] + householdIncomeData["65"][10000] + householdIncomeData["65"][15000] + householdIncomeData["65"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["65"][25000] + householdIncomeData["65"][30000] + householdIncomeData["65"][35000] + householdIncomeData["65"][40000] + householdIncomeData["65"][45000] + householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } 
+          
+          //income
+          incomeChanceCalculator(selectedIncome, "45") //age = 45 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "60", selectedGender)
+
         } else if (selectedAge == "66-70") { //0
-          var totalEarningsAbove65 = householdIncomeData["65"][0] + householdIncomeData["65"][10000] + householdIncomeData["65"][15000] + householdIncomeData["65"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["65"][25000] + householdIncomeData["65"][30000] + householdIncomeData["65"][35000] + householdIncomeData["65"][40000] + householdIncomeData["65"][45000] + householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } 
-        } else if (selectedAge == "71-75") { //0
-          var totalEarningsAbove65 = householdIncomeData["65"][0] + householdIncomeData["65"][10000] + householdIncomeData["65"][15000] + householdIncomeData["65"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["65"][25000] + householdIncomeData["65"][30000] + householdIncomeData["65"][35000] + householdIncomeData["65"][40000] + householdIncomeData["65"][45000] + householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } 
-        } else if (selectedAge == "76-80") { //0
-          var totalEarningsAbove65 = householdIncomeData["65"][0] + householdIncomeData["65"][10000] + householdIncomeData["65"][15000] + householdIncomeData["65"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["65"][25000] + householdIncomeData["65"][30000] + householdIncomeData["65"][35000] + householdIncomeData["65"][40000] + householdIncomeData["65"][45000] + householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } 
+          
+          //income
+          incomeChanceCalculator(selectedIncome, "65") //age = 65 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "60", selectedGender)
+
+        } else if (selectedAge == "71-75") {
+
+          //income
+          incomeChanceCalculator(selectedIncome, "65") //age = 65 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "70", selectedGender)
+
+        } else if (selectedAge == "76-80") {
+          
+          //income
+          incomeChanceCalculator(selectedIncome, "65") //age = 65 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "70", selectedGender)
+
         } else if (selectedAge == "81") { //0
-          var totalEarningsAbove65 = householdIncomeData["65"][0] + householdIncomeData["65"][10000] + householdIncomeData["65"][15000] + householdIncomeData["65"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["65"][25000] + householdIncomeData["65"][30000] + householdIncomeData["65"][35000] + householdIncomeData["65"][40000] + householdIncomeData["65"][45000] + householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["65"][50000] + householdIncomeData["65"][60000] + householdIncomeData["65"][75000] + householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["65"][100000] + householdIncomeData["65"][125000] + householdIncomeData["65"][150000] + householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["65"][200000]) / totalEarningsAbove65
-          } 
+          
+          //income
+          incomeChanceCalculator(selectedIncome, "65") //age = 65 in income data
+
+          //height
+          chanceOfHeight = heightChanceCalculator(selectedHeight, "80", selectedGender)
+
         }
         
         console.log('chance of age = ', chanceOfAge)
