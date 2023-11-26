@@ -295,18 +295,9 @@
           chanceOfHeight = heightChanceCalculator(selectedHeight, "50", selectedGender)
 
         } else if (selectedAge == "56-60") {
-          var totalEarningsAbove45 = householdIncomeData["45"][0] + householdIncomeData["45"][10000] + householdIncomeData["45"][15000] + householdIncomeData["45"][20000] + householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000]+ householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]
-          if (selectedIncome == "any") {
-            var chanceOfEarnings = 1
-          } else if (selectedIncome == "25") {
-            var chanceOfEarnings = (householdIncomeData["45"][25000] + householdIncomeData["45"][30000] + householdIncomeData["45"][35000] + householdIncomeData["45"][40000] + householdIncomeData["45"][45000] + householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "50") {
-            var chanceOfEarnings = (householdIncomeData["45"][50000] + householdIncomeData["45"][60000] + householdIncomeData["45"][75000] + householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "100") {
-            var chanceOfEarnings = (householdIncomeData["45"][100000] + householdIncomeData["45"][125000] + householdIncomeData["45"][150000] + householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } else if (selectedIncome == "200") {
-            var chanceOfEarnings = (householdIncomeData["45"][200000]) / totalEarningsAbove45
-          } 
+          
+          //income
+          incomeChanceCalculator(selectedIncome, "45") //age = 45 in income data
 
           //height
           chanceOfHeight = heightChanceCalculator(selectedHeight, "50", selectedGender)
@@ -354,14 +345,12 @@
         }
         
         console.log('chance of age = ', chanceOfAge)
-        console.log('total earnings under 25 = ', totalEarningsUnder25)
-        console.log('total earnings above 25 = ', totalEarningsAbove25)
-        console.log('total earnings above 45 = ', totalEarningsAbove45)
-        console.log('total earnings above 65 = ', totalEarningsAbove65)
         console.log('chance of earnings = ', chanceOfEarnings)
         console.log('chance of eye = ', chanceOfEye)
         console.log('chance of hair = ', chanceOfHair)
         console.log('chance of height = ', chanceOfHeight)
+        const probability = chanceOfAge * chanceOfEarnings * chanceOfEye * chanceOfHair * chanceOfHeight
+        console.log('total pct chance = ', probability)
 
 
         var probabilities = generateProbabilities();
