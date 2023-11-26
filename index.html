@@ -76,25 +76,24 @@
   <div class="probability-section">
     <h2>Chance of meeting your soulmate in a.....</h2>
 
-    <!-- Probability labels display -->
-    <div class="probability-labels">
-        <div>Room of 100 People</div>
-        <div>Room of 200 People</div>
-        <div>Room of 500 People</div>
-        <div>Room of 1000 People</div>
+    <div class="grouping">
+      <div class="probability-labels">Room of 100 People</div>
+      <div class="probability-values" id="prob-100">Placeholder</div>
+    </div>
+    <div class="grouping">
+      <div class="probability-labels">Room of 200 People</div>
+      <div class="probability-values" id="prob-200">Placeholder</div>
+    </div>
+    <div class="grouping">
+      <div class="probability-labels">Room of 500 People</div>
+      <div class="probability-values" id="prob-500">Placeholder</div>
+    </div>
+    <div class="grouping">
+      <div class="probability-labels">Room of 1000 People</div>
+      <div class="probability-values" id="prob-1000">Placeholder</div>
     </div>
 
-    <!-- Probability values display -->
-    <div class="probability-values">
-        <div id="prob-100">Placeholder</div>
-        <div id="prob-200">Placeholder</div>
-        <div id="prob-500">Placeholder</div>
-        <div id="prob-1000">Placeholder</div>
-    </div>
 </div>
-
-  <canvas id="histogramChart" width="400" height="200"></canvas>
-  <div id="container"></div>
 
   <script type="module">
 
@@ -174,7 +173,7 @@
       } else if (selectedIncome == "50") {
         chanceOfEarnings = (householdIncomeData[age][50000] + householdIncomeData[age][60000] + householdIncomeData[age][75000] + householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarnings
       } else if (selectedIncome == "100") {
-        chanceOfEarnings = (householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarningsUnder25
+        chanceOfEarnings = (householdIncomeData[age][100000] + householdIncomeData[age][125000] + householdIncomeData[age][150000] + householdIncomeData[age][200000]) / totalEarnings
       } else if (selectedIncome == "200") {
         chanceOfEarnings = (householdIncomeData[age][200000]) / totalEarnings
       } 
@@ -353,20 +352,20 @@
         console.log('total pct chance = ', probability)
 
 
-        var probabilities = generateProbabilities();
+        var probabilities = generateProbabilities(probability);
 
         // Update the displayed probabilities
         updateProbabilityDisplay(probabilities);
         
     }
 
-    function generateProbabilities() {
+    function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: Math.random() * 100,
-            prob200: Math.random() * 100,
-            prob500: Math.random() * 100,
-            prob1000: Math.random() * 100,
+            prob100: geometricPMF(100, probability) * 100,
+            prob200: geometricPMF(200, probability) * 100,
+            prob500: geometricPMF(500, probability) * 100,
+            prob1000: geometricPMF(500, probability) * 100
         };
     }
 
@@ -377,42 +376,9 @@
         document.getElementById("prob-1000").innerText = `1000 People: ${probabilities.prob1000.toFixed(2)}%`;
     }
 
-    // Declare the chart dimensions and margins.
-    const width = 640;
-    const height = 400;
-    const marginTop = 20;
-    const marginRight = 20;
-    const marginBottom = 30;
-    const marginLeft = 40;
-    
-    // Declare the x (horizontal position) scale.
-    const x = d3.scaleUtc()
-        .domain([new Date("2023-01-01"), new Date("2024-01-01")])
-        .range([marginLeft, width - marginRight]);
-    
-    // Declare the y (vertical position) scale.
-    const y = d3.scaleLinear()
-        .domain([0, 100])
-        .range([height - marginBottom, marginTop]);
-    
-    // Create the SVG container.
-    const svg = d3.create("svg")
-        .attr("width", width)
-        .attr("height", height);
-    
-    // Add the x-axis.
-    svg.append("g")
-        .attr("transform", `translate(0,${height - marginBottom})`)
-        .call(d3.axisBottom(x));
-    
-    // Add the y-axis.
-    svg.append("g")
-        .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisLeft(y));
-    
-    // Append the SVG element.
-    container.append(svg.node());
-    
+    function geometricPMF(k, p) {
+      return Math.pow(1 - p, k - 1) * p; //k trials and probability of success p
+    }
     </script>
 
 
@@ -452,39 +418,38 @@
     }
 
     .disclaimer {
-            font-size: 12px;
-            color: #777;
-            margin-top: 10px;
+      font-size: 12px;
+      color: #777;
+      margin-top: 10px;
     }
 
     .probability-section {
-            margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .grouping {
+      flex: 0 0 calc(25% - 20px);
+      margin: 10px;
+      text-align: center;
     }
 
     .probability-values {
-            display: flex;
-            justify-content: space-around;
-            align-items: center; /* Align labels and values vertically */
-            margin-top: 20px;
-    }
-
-    .probability-labels div,
-    .probability-values div {
-        width: 150px;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-bottom: 10px;
+      color: #007bff; /* Mathematical and scientific value color */
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
     }
 
     .probability-labels {
-        display: flex;
-        justify-content: space-around;
-        align-items: center; /* Align labels and values vertically */
-        width: 600px;
-        margin: 0 auto;
-        margin-bottom: 10px;
+      font-weight: bold;
+      color: #ff4d4d; /* Prominent and somewhat fancy label color */
+      font-size: 18px;
     }
 
     .titles {
