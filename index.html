@@ -60,10 +60,10 @@
   <label for="income">&#128176; Household Income</label>
   <select id="income" name="income">
     <option value="any">Doesn't matter to me</option>
-    <option value="any">More than $25k</option>
-    <option value="any">More than $50k</option>
-    <option value="any">More than $100k</option>
-    <option value="any">More than $200k</option>
+    <option value="25">More than $25k</option>
+    <option value="50">More than $50k</option>
+    <option value="100">More than $100k</option>
+    <option value="200">More than $200k</option>
   </select>
 
   <div class="disclaimer">
@@ -128,10 +128,10 @@
 
 
     var householdIncomeData = {
-    0: {0: 718818, 10000: 718818, 15000: 258998, 20000: 315881, 25000: 296331, 30000: 341999, 35000: 294764, 40000: 315664, 45000: 243175, 50000: 474780, 60000: 574788, 75000: 578015, 100000: 300929, 125000: 140104, 150000: 111129, 200000: 78652},
-    25: {0: 1951920, 10000: 926285, 15000: 800098, 20000: 1095127, 25000: 1159690, 30000: 1466250, 35000: 1355753, 40000: 1564254, 45000: 1386158, 50000: 3006782, 60000: 4305239, 75000: 6153740, 100000: 4936590, 125000: 3482583, 150000: 4182808, 200000: 5001113},
-    45: {0: 2298892, 10000: 1497958, 15000: 1113994, 20000: 1190739, 25000: 1202878, 30000: 1347782, 35000: 1291127, 40000: 1421107, 45000: 1281853, 50000: 2758946, 60000: 3918418, 75000: 5849072, 100000: 4933555, 125000: 3731699, 150000: 5062628, 200000: 7382159},
-    65: {0: 2149924, 10000: 2120073, 15000: 2025934, 20000: 2012195, 25000: 1846766, 30000: 1763352, 35000: 1653876, 40000: 1579886, 45000: 1446731, 50000: 2693233, 60000: 3363896, 75000: 4069942, 100000: 2682639, 125000: 1736903, 150000: 1916446, 200000: 2416852}};
+    "0": {0: 718818, 10000: 718818, 15000: 258998, 20000: 315881, 25000: 296331, 30000: 341999, 35000: 294764, 40000: 315664, 45000: 243175, 50000: 474780, 60000: 574788, 75000: 578015, 100000: 300929, 125000: 140104, 150000: 111129, 200000: 78652},
+    "25": {0: 1951920, 10000: 926285, 15000: 800098, 20000: 1095127, 25000: 1159690, 30000: 1466250, 35000: 1355753, 40000: 1564254, 45000: 1386158, 50000: 3006782, 60000: 4305239, 75000: 6153740, 100000: 4936590, 125000: 3482583, 150000: 4182808, 200000: 5001113},
+   "45": {0: 2298892, 10000: 1497958, 15000: 1113994, 20000: 1190739, 25000: 1202878, 30000: 1347782, 35000: 1291127, 40000: 1421107, 45000: 1281853, 50000: 2758946, 60000: 3918418, 75000: 5849072, 100000: 4933555, 125000: 3731699, 150000: 5062628, 200000: 7382159},
+    "65": {0: 2149924, 10000: 2120073, 15000: 2025934, 20000: 2012195, 25000: 1846766, 30000: 1763352, 35000: 1653876, 40000: 1579886, 45000: 1446731, 50000: 2693233, 60000: 3363896, 75000: 4069942, 100000: 2682639, 125000: 1736903, 150000: 1916446, 200000: 2416852}};
 
     var eyeColorProbs = {'blue': .45, 'brown': .27, 'green': .28}
     var hairColorProbs = {'black': .85, 'brown': .11, 'blonde': .02, 'red': .01}
@@ -162,16 +162,56 @@
         var selectedHair = document.getElementById("hair").value;
         var selectedEye = document.getElementById("eye").value;
         var selectedHeight = document.getElementById("height").value;
+        var selectedIncome = document.getElementById("income").value;
 
-        const allTheThings = [selectedGender, selectedAge, selectedHair, selectedEye, selectedHeight]
+        const allTheThings = [selectedGender, selectedAge, selectedHair, selectedEye, selectedHeight, selectedIncome]
         console.log(allTheThings)
-        console.log('[gender, age, hair, eye, height]')
+        console.log('[gender, age, hair, eye, height, income]')
 
         if (selectedGender == "male") { //they are male
             const chanceOfAge = ageAndSexData[selectedAge]
-
-            if (selectedAge == "20-24") { //0
-
+            var chanceOfEarnings = 1
+            if (selectedAge == "20-24") { //0 in income data
+              const totalEarningsUnder25 = householdIncomeData["0"][0] + householdIncomeData["0"][10000] + householdIncomeData["0"][15000] + householdIncomeData["0"][20000] + householdIncomeData["0"][25000] + householdIncomeData["0"][30000] + householdIncomeData["0"][35000] + householdIncomeData["0"][40000] + householdIncomeData["0"][45000] + householdIncomeData["0"][50000] + householdIncomeData["0"][55000] + householdIncomeData["0"][60000] + householdIncomeData["0"][65000] + householdIncomeData["0"][70000] + householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]
+              if (selectedIncome == "any") {
+                var chanceOfEarnings = 1
+              } else if (selectedIncome == "25") {
+                var chanceOfEarnings = (householdIncomeData["0"][25000] + householdIncomeData["0"][30000] + householdIncomeData["0"][35000] + householdIncomeData["0"][40000] + householdIncomeData["0"][45000] + householdIncomeData["0"][50000] + householdIncomeData["0"][55000] + householdIncomeData["0"][60000] + householdIncomeData["0"][65000] + householdIncomeData["0"][70000] + householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
+              } else if (selectedIncome == "50") {
+                var chanceOfEarnings = (householdIncomeData["0"][50000] + householdIncomeData["0"][55000] + householdIncomeData["0"][60000] + householdIncomeData["0"][65000] + householdIncomeData["0"][70000] + householdIncomeData["0"][75000] + householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
+              } else if (selectedIncome == "100") {
+                var chanceOfEarnings = (householdIncomeData["0"][100000] + householdIncomeData["0"][125000] + householdIncomeData["0"][150000] + householdIncomeData["0"][200000]) / totalEarningsUnder25
+              } else if (selectedIncome == "200") {
+                var chanceOfEarnings = (householdIncomeData["0"][200000]) / totalEarningsUnder25
+              } 
+              console.log('chance of age = ', chanceOfAge)
+              console.log('chance of earnings', chanceOfEarnings)
+            } else if (selectedAge == "25-29") { //0
+                
+            } else if (selectedAge == "30-34") { //0
+                
+            } else if (selectedAge == "35-39") { //0
+                
+            } else if (selectedAge == "40-44") { //0
+                
+            } else if (selectedAge == "45-50") { //0
+                
+            } else if (selectedAge == "51-55") { //0
+                
+            } else if (selectedAge == "56-60") { //0
+                
+            } else if (selectedAge == "61-65") { //0
+                
+            } else if (selectedAge == "61-65") { //0
+                
+            } else if (selectedAge == "66-70") { //0
+                
+            } else if (selectedAge == "71-75") { //0
+                
+            } else if (selectedAge == "76-80") { //0
+                
+            } else if (selectedAge == "81") { //0
+                
             }
         } else { //then they are female
 
