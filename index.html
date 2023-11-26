@@ -73,25 +73,25 @@
 
   <button onclick="saveValues()">Calculate</button>
 
-  <h2>Chance of meeting your soulmate in a.....</h2>
-  <div class="probability-section">
-
+  <h2>Chance of meeting your soulmate in...</h2>
+  <div class="probability-section"> 
     <div class="grouping">
       <div class="probability-labels">Room of 100 People</div>
-      <div class="probability-values" id="prob-100">Placeholder</div>
-    </div>
-    <div class="grouping">
-      <div class="probability-labels">Room of 200 People</div>
-      <div class="probability-values" id="prob-200">Placeholder</div>
+      <div class="probability-values" id="prob-100">??</div>
     </div>
     <div class="grouping">
       <div class="probability-labels">Room of 500 People</div>
-      <div class="probability-values" id="prob-500">Placeholder</div>
+      <div class="probability-values" id="prob-200">??</div>
     </div>
     <div class="grouping">
-      <div class="probability-labels">Room of 1000 People</div>
-      <div class="probability-values" id="prob-1000">Placeholder</div>
+      <div class="probability-labels">NFL Stadium</div>
+      <div class="probability-values" id="prob-500">??</div>
     </div>
+    <div class="grouping">
+      <div class="probability-labels">United States</div>
+      <div class="probability-values" id="prob-1000">??</div>
+    </div>
+  </div>
 
 </div>
 
@@ -363,17 +363,17 @@
         // For demonstration purposes, generate random probabilities.
         return {
             prob100: geometricPMF(100, probability) * 100,
-            prob200: geometricPMF(200, probability) * 100,
             prob500: geometricPMF(500, probability) * 100,
-            prob1000: geometricPMF(500, probability) * 100
+            probnfl: geometricPMF(60000, probability) * 100,
+            probusa: geometricPMF(334233854, probability) * 100
         };
     }
 
     function updateProbabilityDisplay(probabilities) {
         document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(8)}%`;
-        document.getElementById("prob-200").innerText = `200 People: ${probabilities.prob200.toFixed(8)}%`;
-        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(8)}%`;
-        document.getElementById("prob-1000").innerText = `1000 People: ${probabilities.prob1000.toFixed(8)}%`;
+        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob200.toFixed(8)}%`;
+        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${probabilities.prob500.toFixed(8)}%`;
+        document.getElementById("prob-usa").innerText = `United States: ${probabilities.prob1000.toFixed(8)}%`;
     }
 
     function geometricPMF(k, p) {
