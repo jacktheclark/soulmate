@@ -199,12 +199,13 @@
               
 
               const percentiles = maleAgeAndHeightPercentiles["20"]
-              meanHeightEstimate = percentiles[.5]
+              const meanHeightEstimate = percentiles[.5]
               // Corresponding Z-scores
               const z_025 = (percentiles[.25] - meanHeightEstimate) / conversionFactor;
               const z_075 = (percentiles[.75] - meanHeightEstimate) / conversionFactor;  // by definition, the Z-score at the median (50th percentile) is 0
               const estimated_std_dev = (percentiles[0.75] - percentiles[0.25]) / (z_075 - z_025);
               var xValue = 0
+
               //height in the 20-30 year old range
               if (selectedHeight == "any") {
                 xValue = 0.0
