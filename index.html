@@ -383,9 +383,9 @@
       // console.log("calculating chance")
       //sum a bunch of Binomials
       // var chance = 0
-      p = numPeople //population
-      s = numInPlace*probability //number of people in this place
-      f = 1 //number of soulmates
+      let p = numPeople //population
+      let s = numInPlace*probability //number of people in this place
+      let f = 1 //number of soulmates
       // chanceInPeople = numPeople*p
       let numerator = math.factorial(p-f)/(math.factorial(s)*math.factorial(p-f-s))
       let denominator = math.factorial(p)/(math.factorial(s)*math.factorial(p-s))
