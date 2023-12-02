@@ -384,8 +384,8 @@
       //sum a bunch of Binomials
       // var chance = 0
       let p = numPeople //population
-      let s = numInPlace*probability //number of people in this place
-      let f = 1 //number of soulmates
+      let s = numInPlace //number of people in this place
+      let f = numInPlace*probability //number of soulmates
       // chanceInPeople = numPeople*p
       let numerator = math.factorial(p-f)/(math.factorial(s)*math.factorial(p-f-s))
       let denominator = math.factorial(p)/(math.factorial(s)*math.factorial(p-s))
