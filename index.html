@@ -386,9 +386,13 @@
       let p = numPeople //population
       let s = numInPlace //number of people in this place
       let f = numInPlace*probability //number of soulmates
+      console.log("numInPlace = ", numInPlace)
+      console.log("numInPlace*probability = ", f)
       // chanceInPeople = numPeople*p
       let numerator = math.factorial(p-f)/(math.factorial(s)*math.factorial(p-f-s))
       let denominator = math.factorial(p)/(math.factorial(s)*math.factorial(p-s))
+      console.log("numerator = ", numerator)
+      console.log("denominator = ", denominator)
 
       let probNotSeen = numerator/denominator
 
