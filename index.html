@@ -390,7 +390,7 @@
       console.log("s aka numInPlace = ", numInPlace)
       console.log("f aka numInPlace*probability = ", f)
       // chanceInPeople = numPeople*p
-      let numerator = math.combinations(numInPlace, numInPlace*probability)
+      let numerator = math.combinations(numInPlace, math.ceil(numInPlace*probability))
       let denominator = math.combinations(numPeople, numInPlace)
 
       // console.log("math.factorial(p-f) = ", math.factorial(p-f))
