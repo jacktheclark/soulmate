@@ -363,20 +363,20 @@
     function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: 100*probability,
-            prob500: 500*probability,
-            probnfl: 60000*probability,
-            probusa: numPeople*probability
+            prob100: math.round(100*probability),
+            prob500: math.round(500*probability),
+            probnfl: math.round(60000*probability),
+            probusa: math.round(numPeople*probability)
         };
     }
 
     function updateProbabilityDisplay(probabilities) {
         console.log("updating probability displays!!!")
         console.log("probabilities.prob100.toFixed(8): ", probabilities.prob100.toFixed(8))
-        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(8)}%`;
-        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(8)}%`;
-        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${probabilities.probnfl.toFixed(8)}%`;
-        document.getElementById("prob-usa").innerText = `United States: ${probabilities.probusa.toFixed(8)}%`;
+        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100.toFixed(8)}`;
+        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500.toFixed(8)}`;
+        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${probabilities.probnfl.toFixed(8)}`;
+        document.getElementById("prob-usa").innerText = `United States: ${probabilities.probusa.toFixed(8)}`;
     }
 
     function calculateChance(numInPlace, probability) {
