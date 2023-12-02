@@ -378,7 +378,7 @@
 
     function calculateChance(n, p) {
       //sum a bunch of Binomials
-      chance = 0
+      var chance = 0
       for (let k = 0; k <= people; k++) {
         //Summing binomial PMF's due to exclusivity... this is "OR"
         chance += binomialPMF(k, n, p)
