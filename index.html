@@ -363,10 +363,10 @@
     function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: calculateChance(100,probability) * 100,
-            prob500: calculateChance(500, probability) * 100,
-            probnfl: calculateChance(60000, probability) * 100,
-            probusa: probability * 100
+            prob100: 100*probability,
+            prob500: 500*probability,
+            probnfl: 60000*probability,
+            probusa: numPeople*probability
         };
     }
 
