@@ -74,7 +74,7 @@
 
   <button onclick="saveValues()">Calculate</button>
 
-  <h2>Chance of meeting your soulmate in...</h2>
+  <h2>Look around you! You have this many potential soulmates in...</h2>
   <div class="probability-section"> 
     <div class="grouping">
       <div class="probability-labels">Room of 100 People</div>
@@ -353,30 +353,38 @@
         console.log('total pct chance = ', probability)
 
 
-        var probabilities = generateProbabilities(probability);
+        var nums = generateNums(probability);
 
         // Update the displayed probabilities
-        updateProbabilityDisplay(probabilities);
+        updateNumDisplay(probabilities);
         
     }
 
-    function generateProbabilities(probability) {
+    function generateNums(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: 100*probability,
-            prob500: math.round(500*probability),
-            probnfl: math.round(60000*probability),
-            probusa: math.round(numPeople*probability)
+            num100: checkNum(100*probability),
+            num500: math.round(500*probability),
+            numnfl: math.round(60000*probability),
+            numusa: math.round(numPeople*probability)
         };
     }
 
-    function updateProbabilityDisplay(probabilities) {
+    function updateNumDisplay(nums) {
         console.log("updating probability displays!!!")
-        console.log("probabilities.prob100.toFixed(8): ", probabilities.prob100.toFixed(8))
-        document.getElementById("prob-100").innerText = `100 People: ${probabilities.prob100}`;
-        document.getElementById("prob-500").innerText = `500 People: ${probabilities.prob500}`;
-        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${probabilities.probnfl}`;
-        document.getElementById("prob-usa").innerText = `United States: ${probabilities.probusa}`;
+        console.log("probabilities.prob100.toFixed(8): ", nums.num100.toFixed(8))
+        document.getElementById("prob-100").innerText = `100 People: ${nums.num100}`;
+        document.getElementById("prob-500").innerText = `500 People: ${nums.num500}`;
+        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${nums.numnfl}`;
+        document.getElementById("prob-usa").innerText = `United States: ${nums.numusa}`;
+    }
+
+    function checkNum(num) {
+      if (num < 0) {
+        return "Probably none... sorry!!"
+      } else {
+        return round(num)
+      }
     }
 
     function calculateChance(numInPlace, probability) {
