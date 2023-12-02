@@ -363,10 +363,10 @@
     function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: poisson(1, 100, probability) * 100,
-            prob500: poisson(1, 500, probability) * 100,
-            probnfl: poisson(1, 60000, probability) * 100,
-            probusa: poisson(1, 334233854, probability) * 100
+            prob100: calculateChance(100,probability) * 100,
+            prob500: calculateChance(500, probability) * 100,
+            probnfl: calculateChance(60000, probability) * 100,
+            probusa: calculateChance(334233854, probability) * 100
         };
     }
 
@@ -379,15 +379,23 @@
         document.getElementById("prob-usa").innerText = `United States: ${probabilities.probusa.toFixed(8)}%`;
     }
 
-    function calculateChance(n, p) {
-      console.log("calculating chance")
+    function calculateChance(numInPlace, probability) {
+      // console.log("calculating chance")
       //sum a bunch of Binomials
-      var chance = 0
-      for (let k = 0; k <= n; k++) {
-        //Summing binomial PMF's due to exclusivity... this is "OR"
-        chance += binomialPMF(k, n, p)
-      }
-      return chance
+      // var chance = 0
+      p = numPeople //population
+      s = numInPlace*p //number of people in this place
+      f = 1 //number of soulmates
+      // chanceInPeople = numPeople*p
+      let numerator = math.factorial(p-f)/(math.factorial(s)*math.factorial(p-f-s))
+      let denominator = math.factorial(p)/(math.factorial(s)*math.factorial(p-s))
+
+      let probNotSeen = numerator/denominator
+
+      console.log("probNotSeen = ", probNotSeen)
+      console.log("1-probNotSeen = ", 1-probNotSeen)
+      
+      return 1-probNotSeen
     }
 
     function poisson(x, n, p) {
