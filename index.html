@@ -363,10 +363,10 @@
     function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: binomialPMF(1, 100, probability) * 100,
-            prob500: binomialPMF(1, 500, probability) * 100,
-            probnfl: binomialPMF(1, 60000, probability) * 100,
-            probusa: binomialPMF(1, 334233854, probability) * 100
+            prob100: poission(1, 100, probability) * 100,
+            prob500: poisson(1, 500, probability) * 100,
+            probnfl: poisson(1, 60000, probability) * 100,
+            probusa: poisson(1, 334233854, probability) * 100
         };
     }
 
@@ -390,8 +390,9 @@
       return chance
     }
 
-    function binomialPMF(k, n, p) {
-      return (math.factorial(n)/(math.factorial(k)*math.factorial(n-k)))*(p**k)*(1-p)**(n-k)
+    function poisson(x, n, p) {
+      let lambda = n*p
+      return ((lambda**x)*math.exp(-lambda))/math.factorial(x)
     }
     </script>
 
