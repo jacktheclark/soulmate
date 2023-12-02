@@ -362,10 +362,10 @@
     function generateProbabilities(probability) {
         // For demonstration purposes, generate random probabilities.
         return {
-            prob100: geometricPMF(100, probability) * 100,
-            prob500: geometricPMF(500, probability) * 100,
-            probnfl: geometricPMF(500, probability) * 100,
-            probusa: geometricPMF(334233854, probability) * 100
+            prob100: calculateChance(100, probability) * 100,
+            prob500: calculateChance(500, probability) * 100,
+            probnfl: calculateChance(60000, probability) * 100,
+            probusa: calculateChance(334233854, probability) * 100
         };
     }
 
