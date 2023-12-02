@@ -366,7 +366,7 @@
             prob100: calculateChance(100,probability) * 100,
             prob500: calculateChance(500, probability) * 100,
             probnfl: calculateChance(60000, probability) * 100,
-            probusa: numPeople*probability * 100
+            probusa: probability * 100
         };
     }
 
@@ -390,7 +390,7 @@
       console.log("s aka numInPlace = ", numInPlace)
       console.log("f aka numInPlace*probability = ", f)
       // chanceInPeople = numPeople*p
-      let numerator = math.factorial(p-f)/(math.factorial(s)*math.factorial(p-f-s))
+      let numerator = math.factorial(s)/(math.factorial(f)*math.factorial(s-f))
       let denominator = math.factorial(p)/(math.factorial(s)*math.factorial(p-s))
 
       console.log("math.factorial(p-f) = ", math.factorial(p-f))
