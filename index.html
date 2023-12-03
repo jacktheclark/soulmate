@@ -363,7 +363,7 @@
         // For demonstration purposes, generate random probabilities.
         return {
             num100: checkNum(100*probability),
-            num500: math.round(500*probability),
+            num500: math.ceil(500*probability),
             numnfl: math.round(60000*probability),
             numusa: math.round(numPeople*probability)
         };
@@ -385,36 +385,6 @@
       
       }
     }
-
-    // function calculateChance(numInPlace, probability) {
-    //   // console.log("calculating chance")
-    //   //sum a bunch of Binomials
-    //   // var chance = 0
-    //   let p = numPeople //population
-    //   let s = numInPlace //number of people in this place
-    //   let f = numInPlace*probability //number of soulmates
-    //   console.log("p aka numPeople = ", p)
-    //   console.log("s aka numInPlace = ", numInPlace)
-    //   console.log("f aka numInPlace*probability = ", f)
-    //   // chanceInPeople = numPeople*p
-    //   let numerator = math.combinations(numInPlace, math.ceil(numInPlace*probability))
-    //   let denominator = math.combinations(numPeople, numInPlace)
-    //   console.log("numerator = ", numerator)
-    //   console.log("denominator = ", denominator)
-
-    //   let probNotSeen = numerator/denominator
-
-    //   console.log("probNotSeen = ", probNotSeen)
-    //   console.log("1-probNotSeen = ", 1-probNotSeen)
-      
-    //   return numerator/denominator
-    // }
-
-    // function poisson(x, n, p) {
-    //   console.log("generating poisson :)")
-    //   let lambda = n*p
-    //   return ((lambda**x)*math.exp(-lambda))/math.factorial(x)
-    // }
     </script>
 
 
