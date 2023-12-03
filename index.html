@@ -364,8 +364,8 @@
         return {
             num100: checkNum(100*probability),
             num500: math.ceil(500*probability),
-            numnfl: math.round(60000*probability),
-            numusa: math.round(numPeople*probability)
+            numnfl: math.ceil(60000*probability),
+            numusa: math.ceil(numPeople*probability)
         };
     }
 
