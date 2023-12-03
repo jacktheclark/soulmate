@@ -372,7 +372,7 @@
     function updateNumDisplay(nums) {
         console.log("updating probability displays!!!")
         document.getElementById("prob-100").innerText = `${nums.num100}`;
-        document.getElementById("prob-500").innerText = `${nums.num500} potential matches!`;
+        document.getElementById("prob-500").innerText = `${nums.num500} potential matches.`;
         document.getElementById("prob-nfl").innerText = `${nums.numnfl} potential matches!`;
         document.getElementById("prob-usa").innerText = `${nums.numusa} potential matches! Wow!`;
     }
@@ -381,7 +381,8 @@
       if (num < 1) {
         return "Probably none... sorry!!"
       } else {
-        return math.round(num)
+        return `${math.round(num)} match.... you better start searching.`
+      
       }
     }
 
