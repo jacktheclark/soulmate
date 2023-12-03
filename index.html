@@ -99,7 +99,6 @@
   <script type="module">
 
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-    // import * as math from "https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.6.0/math.min.js";
 
 
     // const ageandincomedata = await d3.csv("data/ageandincome2022.csv");
@@ -372,11 +371,10 @@
 
     function updateNumDisplay(nums) {
         console.log("updating probability displays!!!")
-        // console.log("probabilities.prob100.toFixed(8): ", nums.num100.toFixed(8))
-        document.getElementById("prob-100").innerText = `100 People: ${nums.num100}`;
-        document.getElementById("prob-500").innerText = `500 People: ${nums.num500}`;
-        document.getElementById("prob-nfl").innerText = `NFL Stadium: ${nums.numnfl}`;
-        document.getElementById("prob-usa").innerText = `United States: ${nums.numusa}`;
+        document.getElementById("prob-100").innerText = `${nums.num100}`;
+        document.getElementById("prob-500").innerText = `${nums.num500} potential matches!`;
+        document.getElementById("prob-nfl").innerText = `${nums.numnfl} potential matches!`;
+        document.getElementById("prob-usa").innerText = `${nums.numusa} potential matches! Wow!`;
     }
 
     function checkNum(num) {
@@ -387,44 +385,35 @@
       }
     }
 
-    function calculateChance(numInPlace, probability) {
-      // console.log("calculating chance")
-      //sum a bunch of Binomials
-      // var chance = 0
-      let p = numPeople //population
-      let s = numInPlace //number of people in this place
-      let f = numInPlace*probability //number of soulmates
-      console.log("p aka numPeople = ", p)
-      console.log("s aka numInPlace = ", numInPlace)
-      console.log("f aka numInPlace*probability = ", f)
-      // chanceInPeople = numPeople*p
-      let numerator = math.combinations(numInPlace, math.ceil(numInPlace*probability))
-      let denominator = math.combinations(numPeople, numInPlace)
+    // function calculateChance(numInPlace, probability) {
+    //   // console.log("calculating chance")
+    //   //sum a bunch of Binomials
+    //   // var chance = 0
+    //   let p = numPeople //population
+    //   let s = numInPlace //number of people in this place
+    //   let f = numInPlace*probability //number of soulmates
+    //   console.log("p aka numPeople = ", p)
+    //   console.log("s aka numInPlace = ", numInPlace)
+    //   console.log("f aka numInPlace*probability = ", f)
+    //   // chanceInPeople = numPeople*p
+    //   let numerator = math.combinations(numInPlace, math.ceil(numInPlace*probability))
+    //   let denominator = math.combinations(numPeople, numInPlace)
+    //   console.log("numerator = ", numerator)
+    //   console.log("denominator = ", denominator)
 
-      // console.log("math.factorial(p-f) = ", math.factorial(p-f))
-      // console.log("test facotial(3) = ", math.factorial(3))
-      // console.log("math.factorial(float) = ", math.factorial(1.1))
-      // console.log("math.factorial(s) = ", math.factorial(numInPlace))
-      // console.log("math.factorial(p) = ", math.factorial(numPeople))
-      // console.log("math.factorial(s-f) = ", math.factorial(s-f))
-      // console.log("math.factorial(p-s) = ", math.factorial(p-s))
+    //   let probNotSeen = numerator/denominator
 
-      console.log("numerator = ", numerator)
-      console.log("denominator = ", denominator)
-
-      let probNotSeen = numerator/denominator
-
-      console.log("probNotSeen = ", probNotSeen)
-      console.log("1-probNotSeen = ", 1-probNotSeen)
+    //   console.log("probNotSeen = ", probNotSeen)
+    //   console.log("1-probNotSeen = ", 1-probNotSeen)
       
-      return numerator/denominator
-    }
+    //   return numerator/denominator
+    // }
 
-    function poisson(x, n, p) {
-      console.log("generating poisson :)")
-      let lambda = n*p
-      return ((lambda**x)*math.exp(-lambda))/math.factorial(x)
-    }
+    // function poisson(x, n, p) {
+    //   console.log("generating poisson :)")
+    //   let lambda = n*p
+    //   return ((lambda**x)*math.exp(-lambda))/math.factorial(x)
+    // }
     </script>
 
 
